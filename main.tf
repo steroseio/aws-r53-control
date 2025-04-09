@@ -37,8 +37,10 @@ module "records_a" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 2.0"
 
-  # Pass the explicit zone ID output from the zone module
-  zone_id = module.zone_a.route53_zone_zone_id[var.zone_a_name]
+  # Also pass zone_name which is known at plan time
+  zone_name = var.zone_a_name
+  # Tell the module's internal data source it's a private zone
+  private_zone = true
 
   # Define records for domain-a.com
   # Add your ~12 records here by extending this list
@@ -110,8 +112,10 @@ module "records_b" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 2.0"
 
-  # Pass the explicit zone ID output from the zone module
-  zone_id = module.zone_b.route53_zone_zone_id[var.zone_b_name]
+  # Also pass zone_name which is known at plan time
+  zone_name = var.zone_b_name
+  # Tell the module's internal data source it's a private zone
+  private_zone = true
 
   # Define records for domain-b.com
   # Add your ~200 records here by extending this list
