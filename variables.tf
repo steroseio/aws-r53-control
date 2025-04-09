@@ -31,3 +31,28 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+# Specific tags for zones
+variable "tag_department" {
+  description = "Value for the 'department' tag."
+  type        = string
+  default     = null # Or provide a default if applicable
+}
+
+variable "tag_cost_centre" {
+  description = "Value for the 'cost_centre' tag."
+  type        = string
+  default     = null
+}
+
+variable "tag_billing_team" {
+  description = "Value for the 'billing_team' tag."
+  type        = string
+  default     = null
+}
+
+variable "tag_territory" {
+  description = "Value for the 'territory' tag."
+  type        = string
+  default     = null
+}

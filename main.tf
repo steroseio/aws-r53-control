@@ -20,14 +20,25 @@ module "zone_a" {
     }
   }
 
-  tags = var.tags
+  tags = merge(
+    var.tags,
+    {
+      for k, v in {
+        department   = var.tag_department
+        cost_centre  = var.tag_cost_centre
+        billing_team = var.tag_billing_team
+        territory    = var.tag_territory
+      } : k => v if v != null
+    }
+  )
 }
 
 module "records_a" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 2.0"
 
-  zone_name = var.zone_a_name
+  # Pass the explicit zone ID output from the zone module
+  zone_id = module.zone_a.route53_zone_zone_id[var.zone_a_name]
 
   # Define records for domain-a.com
   # Add your ~12 records here by extending this list
@@ -59,15 +70,6 @@ module "records_a" {
         "20 mail2.example.com",
       ]
     },
-    {
-      name    = "subdomain"
-      type    = "NS"
-      ttl     = 172800
-      records = [
-        "ns1.subdomain.example.com",
-        "ns2.subdomain.example.com",
-      ]
-    },
     # Add more records for domain-a.com here
   ]
 
@@ -91,14 +93,25 @@ module "zone_b" {
     }
   }
 
-  tags = var.tags
+  tags = merge(
+    var.tags,
+    {
+      for k, v in {
+        department   = var.tag_department
+        cost_centre  = var.tag_cost_centre
+        billing_team = var.tag_billing_team
+        territory    = var.tag_territory
+      } : k => v if v != null
+    }
+  )
 }
 
 module "records_b" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 2.0"
 
-  zone_name = var.zone_b_name
+  # Pass the explicit zone ID output from the zone module
+  zone_id = module.zone_b.route53_zone_zone_id[var.zone_b_name]
 
   # Define records for domain-b.com
   # Add your ~200 records here by extending this list
@@ -127,15 +140,6 @@ module "records_b" {
       ttl     = 60
       records = [
         "10 mailserver1.example.com",
-      ]
-    },
-    {
-      name    = "delegated"
-      type    = "NS"
-      ttl     = 172800
-      records = [
-        "ns1.delegated.example.com",
-        "ns2.delegated.example.com",
       ]
     },
     # Add more records for domain-b.com here
